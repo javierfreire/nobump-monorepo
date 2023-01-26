@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo App1
+echo app1
