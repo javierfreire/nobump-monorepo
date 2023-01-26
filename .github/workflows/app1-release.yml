@@ -1,0 +1,22 @@
+name: app1-release
+on:
+  push:
+    tags:
+      - 'app1-v*'
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Attach assets to release
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          tag: ${{ github.ref_name }}
+          token: ${{ github.token }}
+          artifacts: "app1/app1.sh"
+          omitBodyDuringUpdate: true
+          omitNameDuringUpdate: true
+          omitPrereleaseDuringUpdate: true

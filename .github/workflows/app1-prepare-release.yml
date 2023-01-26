@@ -1,0 +1,30 @@
+name: app1-prepare-release
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'app1/**' ]
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: javierfreire/next-release@v1
+        id: next
+        with:
+          tag-prefix: app1-v
+          paths: app1
+      - name: Create Release as draft
+        uses: ncipollo/release-action@v1
+        with:
+          allowUpdates: true
+          updateOnlyUnreleased: true
+          draft: true
+          commit: ${{ github.sha }}
+          tag: ${{ steps.next.outputs.next-version-tag }}
+          name: App1 ${{ steps.next.outputs.next-version }}
+          body: ${{ steps.next.outputs.changelog }}
+          token: ${{ github.token }}
